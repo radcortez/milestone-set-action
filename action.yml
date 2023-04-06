@@ -1,0 +1,10 @@
+name: 'Milestone Set Action'
+description: 'Set the first available Milestone to a PR'
+inputs:
+  github-token:
+    description: 'The GitHub token used to create an authenticated client'
+    default: ${{github.token}}
+    required: true
+runs:
+  using: 'node12'
+  main: 'index.js'
