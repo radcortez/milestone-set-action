@@ -1,5 +1,8 @@
 name: 'Milestone Set Action'
-description: 'Set the first available Milestone to a PR'
+description: 'Set the first available Milestone to a merged PR'
+branding:
+  icon: bookmark
+  color: red
 inputs:
   github-token:
     description: 'The GitHub token used to create an authenticated client'
