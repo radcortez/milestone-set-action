@@ -2,13 +2,16 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 
 try {
+    const token = core.getInput('github-token')
+    const ghOwner = github.context.repo.owner;
+    const ghRepo = github.context.repo.repo;
     const pullRequestNumber = github.context.payload.pull_request.number
     console.log(`Pull Request Number ${pullRequestNumber}`);
 
-    const octokit = new github.GitHub(core.getInput('github-token'));
-    octokit.issues.listMilestonesForRepo({
-        owner: github.context.repo.owner,
-        repo: github.context.repo.repo,
+    const octokit = github.getOctokit(token);
+    octokit.rest.issues.listMilestones({
+        owner: ghOwner,
+        repo: ghRepo,
         state: 'open',
         sort: 'due_on',
         direction: 'asc',
@@ -23,9 +26,9 @@ try {
 
         console.log(`Found Milestone ${milestone.title}`);
 
-        octokit.issues.get({
-            owner: github.context.repo.owner,
-            repo: github.context.repo.repo,
+        octokit.rest.issues.get({
+            owner: ghOwner,
+            repo: ghRepo,
             issue_number: pullRequestNumber,
         }).then(issue => {
             if (issue.data.milestone != null) {
@@ -35,9 +38,9 @@ try {
 
             console.log(`Setting Milestone ${milestone.title} to Pull Request ${pullRequestNumber}`);
 
-            octokit.issues.update({
-                owner: github.context.repo.owner,
-                repo: github.context.repo.repo,
+            octokit.rest.issues.update({
+                owner: ghOwner,
+                repo: ghRepo,
                 issue_number: pullRequestNumber,
                 milestone: milestone.number
             })
