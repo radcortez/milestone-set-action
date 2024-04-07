@@ -16,9 +16,10 @@ try {
         sort: 'due_on',
         direction: 'asc',
     }).then(({data}) => {
-        
+
         let milestone = data.shift();
         let first = milestone;
+
         while (milestone && milestone.due_on === null) {
             milestone = data.shift();
         }
