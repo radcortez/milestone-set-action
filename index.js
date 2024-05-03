@@ -18,6 +18,16 @@ try {
     }).then(({data}) => {
 
         let milestone = data.shift();
+        let first = milestone;
+
+        while (milestone && milestone.due_on === null) {
+            milestone = data.shift();
+        }
+
+        if (milestone == null && first !== null) {
+            console.log(`No Milestones with due date found, falling back to first Milestone!`);
+            milestone = first;
+        }
 
         if (milestone == null) {
             console.log(`No Milestones found!`);
